@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Jackson · Stato lavoro</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root { color-scheme: light dark; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    body { margin: 0; padding: 28px 20px; background: var(--tg-theme-bg-color,#12151b); color: var(--tg-theme-text-color,#fff); }
+    main { max-width: 420px; margin: 8vh auto; }
+    h1 { font-size: 26px; }
+    p { line-height: 1.55; color: var(--tg-theme-hint-color,#aab); }
+    button { width: 100%; border: 0; border-radius: 12px; padding: 16px; font-weight: 700; font-size: 16px; background: var(--tg-theme-button-color,#4098ea); color: var(--tg-theme-button-text-color,#fff); cursor: pointer; }
+    #result { margin-top: 18px; min-height: 2em; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>💻 Stato lavoro</h1>
+  <p>Autorizza il tuo bot Telegram a modificare l'emoji di stato. L'autorizzazione è richiesta una sola volta e può essere revocata nelle impostazioni di Telegram.</p>
+  <button id="authorize">Autorizza emoji di stato</button>
+  <p id="result" role="status"></p>
+</main>
+<script>
+  const tg = window.Telegram?.WebApp;
+  const result = document.getElementById('result');
+  if (tg) tg.ready();
+  document.getElementById('authorize').addEventListener('click', () => {
+    if (!tg || typeof tg.requestEmojiStatusAccess !== 'function') {
+      result.textContent = 'Apri questa pagina come Mini App dall’app Telegram aggiornata.';
+      return;
+    }
+    tg.requestEmojiStatusAccess((allowed) => {
+      result.textContent = allowed
+        ? '✅ Permesso concesso! Ora possiamo configurare il comando NFC.'
+        : 'Permesso non concesso. Puoi riprovare quando vuoi.';
+    });
+  });
+</script>
+</body>
+</html>
